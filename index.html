@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Yield Prediction</title>
+</head>
+<body>
+    <h1>Crop Yield Prediction</h1>
+    <form id="predictionForm">
+        <label for="temperature">Temperature:</label>
+        <input type="number" id="temperature" name="temperature" required><br><br>
+        <label for="humidity">Humidity:</label>
+        <input type="number" id="humidity" name="humidity" required><br><br>
+        <label for="soil_conditions">Soil Conditions:</label>
+        <input type="text" id="soil_conditions" name="soil_conditions" required><br><br>
+        <label for="precipitation">Precipitation:</label>
+        <input type="number" id="precipitation" name="precipitation" required><br><br>
+        <label for="crop_type">Crop Type:</label>
+        <input type="text" id="crop_type" name="crop_type" required><br><br>
+        <button type="button" onclick="predictYield()">Predict</button>
+    </form>
+    <h2>Predicted Yield: <span id="result"></span></h2>
+    <script>
+        async function predictYield() {
+            const form = document.getElementById('predictionForm');
+            const data = {
+                temperature: form.temperature.value,
+                humidity: form.humidity.value,
+                soil_conditions: form.soil_conditions.value,
+                precipitation: form.precipitation.value,
+                crop_type: form.crop_type.value
+            };
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = result.predicted_yield;
+        }
+    </script>
+</body>
+</html>
